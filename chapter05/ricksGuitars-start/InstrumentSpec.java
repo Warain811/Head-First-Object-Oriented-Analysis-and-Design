@@ -1,52 +1,37 @@
-public abstract class InstrumentSpec {
-  private Builder builder;
-  private String model;
-  private Type type;
-  private Wood backWood;
-  private Wood topWood;
+import java.util.Map;
+import java.util.Iterator;
+import java.util.HashMap;
 
-  public InstrumentSpec(Builder builder, String model, Type type,
-                        Wood backWood, Wood topWood) {
-    this.builder = builder;
-    this.model = model;
-    this.type = type;
-    this.backWood = backWood;
-    this.topWood = topWood;
+public class InstrumentSpec {
+
+  private Map<String, String> properties;
+
+  public InstrumentSpec(Map<String, String> properties) {
+    if (properties == null) {
+      this.properties = new HashMap<String, String>();
+    } else {
+      this.properties = new HashMap<String, String>();
+    }
   }
 
-  public Builder getBuilder() {
-    return builder;
+  public String getProperty(String key) {
+    return properties.get(key);
   }
 
-  public String getModel() {
-    return model;
+  public Map<String, String> getProperties() {
+    return properties;
   }
 
-  public Type getType() {
-    return type;
-  }
-
-  public Wood getBackWood() {
-    return backWood;
-  }
-
-  public Wood getTopWood() {
-    return topWood;
-  }
-
-  // All the get methods for builder, model, type, etc.
   public boolean matches(InstrumentSpec otherSpec) {
-    if (builder != otherSpec.builder)
-      return false;
-    if ((model != null) && (!model.equals("")) &&
-        (!model.equals(otherSpec.model)))
-      return false;
-    if (type != otherSpec.type)
-      return false;
-    if (backWood != otherSpec.backWood)
-      return false;
-    if (topWood != otherSpec.topWood)
-      return false;
+    for (Iterator<String> i = otherSpec.getProperties().keySet().iterator(); i.hasNext();) {
+      String property = i.next();
+
+      if(!(this.getProperty(property).equals(
+          otherSpec.getProperty(property)))) {
+        return false;
+      }
+
+    }
     return true;
   }
 
